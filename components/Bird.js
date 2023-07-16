@@ -1,6 +1,6 @@
 import React from "react";
 import Matter from "matter-js";
-import { View, Image, TouchableOpacity } from "react-native";
+import { View, Image } from "react-native";
 
 const Bird = (props) => {
   const widthBody = props.body.bounds.max.x - props.body.bounds.min.x;
@@ -12,27 +12,23 @@ const Bird = (props) => {
   const color = props.color;
 
   return (
-    <TouchableOpacity style={{ backgroundColor: "transparent" }}>
-      <View
+    <View
+      style={{
+        position: "absolute",
+        left: xBody,
+        top: yBody,
+        width: widthBody,
+        height: heightBody,
+      }}
+    >
+      <Image
+        source={require("../assets/flappybird2.png")}
         style={{
-          backgroundColor: "transparent",
-          position: "absolute",
-          left: xBody,
-          top: yBody,
-          width: widthBody,
-          height: heightBody,
+          width: 50,
+          height: 40,
         }}
-      >
-        <Image
-          source={require("../assets/flappybird.jpeg")}
-          style={{
-            backgroundColor: "transparent",
-            width: 50,
-            height: 40,
-          }}
-        />
-      </View>
-    </TouchableOpacity>
+      />
+    </View>
   );
 };
 
