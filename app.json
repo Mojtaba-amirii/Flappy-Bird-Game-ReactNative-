@@ -1,19 +1,18 @@
 {
   "expo": {
-    "name": "flappybird",
-    "slug": "flappybird",
+    "name": "flappy bird",
+    "slug": "flappy-bird-game",
+    "description": "Flappy bird that wants to go home",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/flappy-bird.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/flappybird2.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
