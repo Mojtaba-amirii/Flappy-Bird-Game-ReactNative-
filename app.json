@@ -5,10 +5,10 @@
     "description": "Flappy bird that wants to go home",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/flappy-bird.png",
+    "icon": "./assets/images/flappy-bird.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/flappybird2.png",
+      "image": "./assets/images/flappybird2.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,12 +18,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/images/favicon.png"
     }
   }
 }

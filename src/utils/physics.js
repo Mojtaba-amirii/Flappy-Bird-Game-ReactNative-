@@ -1,5 +1,5 @@
 import Matter from "matter-js";
-import { getPipeSizePosPair } from "./utils/random";
+import { getPipeSizePosPair } from "./random";
 import { Dimensions } from "react-native";
 
 const windowHeight = Dimensions.get("window").height;
@@ -10,7 +10,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
 
   touches
     .filter((t) => t.type === "press")
-    .forEach((t) => {
+    .forEach(() => {
       Matter.Body.setVelocity(entities.Bird.body, {
         x: 0,
         y: -7,
@@ -56,4 +56,5 @@ const Physics = (entities, { touches, time, dispatch }) => {
 
   return entities;
 };
+
 export default Physics;

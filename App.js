@@ -9,8 +9,9 @@ import {
 } from "react-native";
 import React, { useEffect, useState, ref } from "react";
 import { GameEngine } from "react-native-game-engine";
-import entities from "./entities";
-import Physics from "./physics";
+
+import entities from "./src/entities";
+import Physics from "./src/utils/physics";
 
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
@@ -23,11 +24,13 @@ export default function App() {
   useEffect(() => {
     setRunning(false);
   }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
-        source={require("./assets/flappybirdwallpaper.jpeg")}
-        style={{ with: windowWidth, height: windowHeight }}
+        source={require("./assets/images/flappybirdwallpaper.jpeg")}
+        style={{ width: windowWidth, height: windowHeight }}
+        resizeMode="cover"
       >
         <Text
           style={{
@@ -35,10 +38,12 @@ export default function App() {
             fontSize: 40,
             fontWeight: "bold",
             margin: 20,
+            zIndex: 1,
           }}
         >
           {currentPoints}
         </Text>
+
         <GameEngine
           ref={(ref) => {
             setGameEngine(ref);

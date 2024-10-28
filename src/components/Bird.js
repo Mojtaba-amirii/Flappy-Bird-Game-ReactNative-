@@ -1,48 +1,52 @@
 import React from "react";
 import Matter from "matter-js";
-import { View } from "react-native";
+import { View, Image } from "react-native";
 
-const Floor = (props) => {
+const Bird = (props) => {
   const widthBody = props.body.bounds.max.x - props.body.bounds.min.x;
   const heightBody = props.body.bounds.max.y - props.body.bounds.min.y;
-
   const xBody = props.body.position.x - widthBody / 2;
   const yBody = props.body.position.y - heightBody / 2;
-
   const color = props.color;
 
   return (
     <View
       style={{
-        backgroundColor: color,
         position: "absolute",
         left: xBody,
         top: yBody,
         width: widthBody,
         height: heightBody,
+        backgroundColor: "blue",
       }}
-    />
+    >
+      <Image
+        source={require("../../assets/images/flappybird2.png")}
+        alt="bird-image"
+        style={{
+          width: widthBody,
+          height: heightBody,
+          resizeMode: "contain",
+        }}
+      />
+    </View>
   );
 };
 
 export default (world, color, pos, size) => {
-  const initialFloor = Matter.Bodies.rectangle(
+  const initialBird = Matter.Bodies.rectangle(
     pos.x,
     pos.y,
     size.width,
     size.height,
-    {
-      label: "Floor",
-
-      isStatic: true,
-    }
+    { label: "Bird" }
   );
-  Matter.World.add(world, initialFloor);
+  Matter.World.add(world, initialBird);
 
   return {
-    body: initialFloor,
+    body: initialBird,
     color,
     pos,
-    renderer: <Floor />,
+    renderer: <Bird />,
   };
 };
