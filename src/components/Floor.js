@@ -35,6 +35,7 @@ export default (world, color, pos, size) => {
       isStatic: true,
     }
   );
+
   Matter.World.add(world, initialFloor);
 
   return {

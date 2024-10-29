@@ -5,16 +5,17 @@ import { Dimensions } from "react-native";
 import Obstacle from "../components/Obstacle";
 import { getPipeSizePosPair } from "../utils/random";
 
-const windowHeight = Dimensions.get("window").height;
-const windowWidth = Dimensions.get("window").width;
+const { height: windowHeight, width: windowWidth } = Dimensions.get("window");
+
+const initializeWorld = () => {
+  const engine = Matter.Engine.create({ enableSleeping: false });
+  const world = engine.world;
+  world.y = 0.4;
+  return { engine, world };
+};
 
 export default (restart) => {
-  let engine = Matter.Engine.create({ enableSleeping: false });
-
-  let world = engine.world;
-
-  world.y = 0.4;
-
+  const { engine, world } = initializeWorld();
   const pipeSizePosA = getPipeSizePosPair();
   const pipeSizePosB = getPipeSizePosPair(windowWidth * 0.9);
 

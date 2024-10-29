@@ -4,6 +4,7 @@
     "slug": "flappy-bird-game",
     "description": "Flappy bird that wants to go home",
     "version": "1.0.0",
+    "scheme": "flappy-bird-game",
     "orientation": "portrait",
     "icon": "./assets/images/flappy-bird.png",
     "userInterfaceStyle": "light",
@@ -12,7 +13,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },

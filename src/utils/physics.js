@@ -2,8 +2,7 @@ import Matter from "matter-js";
 import { getPipeSizePosPair } from "./random";
 import { Dimensions } from "react-native";
 
-const windowHeight = Dimensions.get("window").height;
-const windowWidth = Dimensions.get("window").width;
+const { height: windowHeight, width: windowWidth } = Dimensions.get("window");
 
 const Physics = (entities, { touches, time, dispatch }) => {
   let engine = entities.physics.engine;
@@ -13,41 +12,35 @@ const Physics = (entities, { touches, time, dispatch }) => {
     .forEach(() => {
       Matter.Body.setVelocity(entities.Bird.body, {
         x: 0,
-        y: -7,
+        y: -8,
       });
     });
 
   Matter.Engine.update(engine, time.delta);
 
-  for (let index = 1; index <= 2; index++) {
-    if (
-      entities[`ObstacleTop${index}`].body.bounds.max.x <= 50 &&
-      !entities[`ObstacleTop${index}`].point
-    ) {
-      entities[`ObstacleTop${index}`].point = true;
+  const birdY = entities.Bird.body.position.y;
+  if (birdY > windowHeight || birdY < 0) {
+    dispatch({ type: "game-over" });
+  }
+
+  for (let i = 1; i <= 2; i++) {
+    const obstacleTop = entities[`ObstacleTop${i}`];
+    const obstacleBottom = entities[`ObstacleBottom${i}`];
+
+    if (obstacleTop.body.bounds.max.x <= 50 && !obstacleTop.point) {
+      obstacleTop.point = true;
       dispatch({ type: "new-point" });
     }
 
-    if (entities[`ObstacleTop${index}`].body.bounds.max.x <= 0) {
-      const pipeSizePos = getPipeSizePosPair(windowWidth * 0.9);
-      Matter.Body.setPosition(
-        entities[`ObstacleTop${index}`].body,
-        pipeSizePos.pipeTop.pos
-      );
-      Matter.Body.setPosition(
-        entities[`ObstacleBottom${index}`].body,
-        pipeSizePos.pipeBottom.pos
-      );
-      entities[`ObstacleTop${index}`].point = false;
+    if (obstacleTop.body.bounds.max.x <= 0) {
+      const { pipeTop, pipeBottom } = getPipeSizePosPair(windowWidth * 0.9);
+      Matter.Body.setPosition(obstacleTop.body, pipeTop.pos);
+      Matter.Body.setPosition(obstacleBottom.body, pipeBottom.pos);
+      obstacleTop.point = false;
     }
-    Matter.Body.translate(entities[`ObstacleTop${index}`].body, {
-      x: -3,
-      y: 0,
-    });
-    Matter.Body.translate(entities[`ObstacleBottom${index}`].body, {
-      x: -3,
-      y: 0,
-    });
+
+    Matter.Body.translate(obstacleTop.body, { x: -3, y: 0 });
+    Matter.Body.translate(obstacleBottom.body, { x: -3, y: 0 });
   }
 
   Matter.Events.on(engine, "collisionStart", (event) => {

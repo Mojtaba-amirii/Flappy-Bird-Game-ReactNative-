@@ -7,14 +7,14 @@ import {
   Dimensions,
   ImageBackground,
 } from "react-native";
-import React, { useEffect, useState, ref } from "react";
+import React, { useEffect, useState } from "react";
 import { GameEngine } from "react-native-game-engine";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import entities from "./src/entities";
 import Physics from "./src/utils/physics";
 
-const windowHeight = Dimensions.get("window").height;
-const windowWidth = Dimensions.get("window").width;
+const { height: windowHeight, width: windowWidth } = Dimensions.get("window");
 
 export default function App() {
   const [running, setRunning] = useState(false);
@@ -26,79 +26,98 @@ export default function App() {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
-      <ImageBackground
-        source={require("./assets/images/flappybirdwallpaper.jpeg")}
-        style={{ width: windowWidth, height: windowHeight }}
-        resizeMode="cover"
-      >
-        <Text
-          style={{
-            textAlign: "center",
-            fontSize: 40,
-            fontWeight: "bold",
-            margin: 20,
-            zIndex: 1,
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <ImageBackground
+          source={{
+            uri: "https://wallpaperaccess.com/full/4622688.png",
           }}
+          style={styles.background}
+          resizeMode="cover"
         >
-          {currentPoints}
-        </Text>
+          <Text style={styles.score}>{currentPoints}</Text>
 
-        <GameEngine
-          ref={(ref) => {
-            setGameEngine(ref);
-          }}
-          systems={[Physics]}
-          entities={entities()}
-          running={running}
-          onEvent={(e) => {
-            switch (e.type) {
-              case "Game-Over":
-                setRunning(false);
-                gameEngine.stop();
-
-                break;
-              case "new-point":
-                setCurrentPoints(currentPoints + 1);
-                break;
-            }
-          }}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}
-        >
-          <StatusBar style="auto" hidden={true} />
-        </GameEngine>
-
-        {!running ? (
-          <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          <GameEngine
+            ref={(ref) => {
+              setGameEngine(ref);
+            }}
+            systems={[Physics]}
+            entities={entities()}
+            running={running}
+            onEvent={(e) => {
+              switch (e.type) {
+                case "Game-Over":
+                  setRunning(false);
+                  gameEngine.stop();
+                  break;
+                case "new-point":
+                  setCurrentPoints(currentPoints + 1);
+                  break;
+              }
+            }}
+            style={styles.gameEngine}
           >
-            <TouchableOpacity
-              style={{
-                backgroundColor: "black",
-                paddingHorizontal: 30,
-                paddingVertical: 10,
-              }}
-              onPress={() => {
-                setCurrentPoints(0);
-                setRunning(true);
-                gameEngine.swap(entities());
-              }}
-            >
-              <Text
-                style={{ fontWeight: "bold", color: "white", fontSize: 30 }}
+            <StatusBar style="auto" hidden={true} />
+          </GameEngine>
+
+          {!running && (
+            <View style={styles.startContainer}>
+              <TouchableOpacity
+                style={styles.startButton}
+                onPress={() => {
+                  setCurrentPoints(0);
+                  setRunning(true);
+                  gameEngine.swap(entities());
+                }}
               >
-                START GAME
-              </Text>
-            </TouchableOpacity>
-          </View>
-        ) : null}
-      </ImageBackground>
-    </View>
+                <Text style={styles.startButtonText}>START GAME</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </ImageBackground>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: "100%",
+    width: "100%",
+  },
+  background: {
+    width: windowWidth,
+    height: windowHeight,
+    flex: 1,
+    background: "repeat",
+  },
+  score: {
+    textAlign: "center",
+    fontSize: 40,
+    fontWeight: "bold",
+    margin: 20,
+  },
+  gameEngine: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  startContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  startButton: {
+    backgroundColor: "black",
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+  },
+  startButtonText: {
+    fontWeight: "bold",
+    color: "white",
+    fontSize: 30,
+  },
+});
