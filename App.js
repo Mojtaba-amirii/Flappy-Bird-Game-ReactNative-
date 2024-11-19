@@ -9,12 +9,14 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { GameEngine } from "react-native-game-engine";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import entities from "./src/entities";
 import Physics from "./src/utils/physics";
 
-const { height: windowHeight, width: windowWidth } = Dimensions.get("window");
+const { height: windowHeight, width: windowWidth } = Math.round(
+  Dimensions.get("window")
+);
 
 export default function App() {
   const [running, setRunning] = useState(false);
@@ -26,56 +28,54 @@ export default function App() {
   }, []);
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        <ImageBackground
-          source={{
-            uri: "https://wallpaperaccess.com/full/4622688.png",
+    <SafeAreaProvider style={styles.container}>
+      <ImageBackground
+        source={{
+          uri: "https://wallpaperaccess.com/full/4622688.png",
+        }}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <Text style={styles.score}>{currentPoints}</Text>
+
+        <GameEngine
+          ref={(ref) => {
+            setGameEngine(ref);
           }}
-          style={styles.background}
-          resizeMode="cover"
+          systems={[Physics]}
+          entities={entities()}
+          running={running}
+          onEvent={(e) => {
+            switch (e.type) {
+              case "Game-Over":
+                setRunning(false);
+                gameEngine.stop();
+                break;
+              case "new-point":
+                setCurrentPoints(currentPoints + 1);
+                break;
+            }
+          }}
+          style={styles.gameEngine}
         >
-          <Text style={styles.score}>{currentPoints}</Text>
+          <StatusBar style="auto" hidden={true} />
+        </GameEngine>
 
-          <GameEngine
-            ref={(ref) => {
-              setGameEngine(ref);
-            }}
-            systems={[Physics]}
-            entities={entities()}
-            running={running}
-            onEvent={(e) => {
-              switch (e.type) {
-                case "Game-Over":
-                  setRunning(false);
-                  gameEngine.stop();
-                  break;
-                case "new-point":
-                  setCurrentPoints(currentPoints + 1);
-                  break;
-              }
-            }}
-            style={styles.gameEngine}
-          >
-            <StatusBar style="auto" hidden={true} />
-          </GameEngine>
-
-          {!running && (
-            <View style={styles.startContainer}>
-              <TouchableOpacity
-                style={styles.startButton}
-                onPress={() => {
-                  setCurrentPoints(0);
-                  setRunning(true);
-                  gameEngine.swap(entities());
-                }}
-              >
-                <Text style={styles.startButtonText}>START GAME</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </ImageBackground>
-      </SafeAreaView>
+        {!running && (
+          <View style={styles.startContainer}>
+            <TouchableOpacity
+              style={styles.startButton}
+              onPress={() => {
+                setCurrentPoints(0);
+                setRunning(true);
+                gameEngine.swap(entities());
+              }}
+            >
+              <Text style={styles.startButtonText}>START GAME</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </ImageBackground>
     </SafeAreaProvider>
   );
 }
@@ -83,8 +83,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: "100%",
-    width: "100%",
+    height: windowHeight,
+    width: windowWidth,
   },
   background: {
     width: windowWidth,
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 40,
     fontWeight: "bold",
-    margin: 20,
+    marginTop: 50,
   },
   gameEngine: {
     position: "absolute",

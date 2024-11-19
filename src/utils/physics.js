@@ -16,7 +16,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
       });
     });
 
-  Matter.Engine.update(engine, time.delta);
+  Matter.Engine.update(engine, Math.min(time.delta, 16.66));
 
   const birdY = entities.Bird.body.position.y;
   if (birdY > windowHeight || birdY < 0) {

@@ -1,13 +1,14 @@
 {
   "expo": {
-    "name": "flappy bird",
+    "name": "Flappy Bird Game",
     "slug": "flappy-bird-game",
-    "description": "Flappy bird that wants to go home",
+    "description": "Help the flappy bird that wants to go home and train your reflexes.",
     "version": "1.0.0",
     "scheme": "flappy-bird-game",
     "orientation": "portrait",
     "icon": "./assets/images/flappy-bird.png",
     "userInterfaceStyle": "light",
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/flappybird2.png",
       "resizeMode": "contain",
@@ -31,6 +32,12 @@
       "eas": {
         "projectId": "cab1a4e2-eec8-443c-a20f-fa78e5b0bb63"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/cab1a4e2-eec8-443c-a20f-fa78e5b0bb63"
     }
   }
 }
