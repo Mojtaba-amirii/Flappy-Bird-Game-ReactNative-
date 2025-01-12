@@ -14,7 +14,7 @@ const initializeWorld = () => {
   return { engine, world };
 };
 
-export default (restart) => {
+export default () => {
   const { engine, world } = initializeWorld();
   const pipeSizePosA = getPipeSizePosPair();
   const pipeSizePosB = getPipeSizePosPair(windowWidth * 0.9);

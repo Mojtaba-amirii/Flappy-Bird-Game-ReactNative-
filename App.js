@@ -1,3 +1,5 @@
+import React, { useEffect, useState, useCallback } from "react";
+
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -7,10 +9,8 @@ import {
   Dimensions,
   ImageBackground,
 } from "react-native";
-import React, { useEffect, useState } from "react";
 import { GameEngine } from "react-native-game-engine";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
 import entities from "./src/entities";
 import Physics from "./src/utils/physics";
 
@@ -27,6 +27,27 @@ export default function App() {
     setRunning(false);
   }, []);
 
+  const handleEvent = useCallback(
+    (e) => {
+      switch (e.type) {
+        case "Game-Over":
+          setRunning(false);
+          gameEngine.stop();
+          break;
+        case "new-point":
+          setCurrentPoints((prevPoints) => prevPoints + 1);
+          break;
+      }
+    },
+    [gameEngine]
+  );
+
+  const handleStart = useCallback(() => {
+    setCurrentPoints(0);
+    setRunning(true);
+    gameEngine.swap(entities());
+  }, [gameEngine]);
+
   return (
     <SafeAreaProvider style={styles.container}>
       <ImageBackground
@@ -39,23 +60,11 @@ export default function App() {
         <Text style={styles.score}>{currentPoints}</Text>
 
         <GameEngine
-          ref={(ref) => {
-            setGameEngine(ref);
-          }}
+          ref={(ref) => setGameEngine(ref)}
           systems={[Physics]}
           entities={entities()}
           running={running}
-          onEvent={(e) => {
-            switch (e.type) {
-              case "Game-Over":
-                setRunning(false);
-                gameEngine.stop();
-                break;
-              case "new-point":
-                setCurrentPoints(currentPoints + 1);
-                break;
-            }
-          }}
+          onEvent={handleEvent}
           style={styles.gameEngine}
         >
           <StatusBar style="auto" hidden={true} />
@@ -63,14 +72,7 @@ export default function App() {
 
         {!running && (
           <View style={styles.startContainer}>
-            <TouchableOpacity
-              style={styles.startButton}
-              onPress={() => {
-                setCurrentPoints(0);
-                setRunning(true);
-                gameEngine.swap(entities());
-              }}
-            >
+            <TouchableOpacity style={styles.startButton} onPress={handleStart}>
               <Text style={styles.startButtonText}>START GAME</Text>
             </TouchableOpacity>
           </View>
