@@ -1,4 +1,3 @@
-import React from "react";
 import Matter from "matter-js";
 import { View, Image, StyleSheet } from "react-native";
 
