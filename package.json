@@ -10,18 +10,18 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "^5.0.4",
-    "@react-native/assets-registry": "^0.79.2",
-    "expo": "^53.0.9",
+    "@react-native/assets-registry": "^0.79.5",
+    "expo": "^53.0.20",
     "expo-status-bar": "^2.2.3",
-    "expo-updates": "^0.28.13",
+    "expo-updates": "^0.28.17",
     "matter-js": "^0.20.0",
-    "react": "^19.1.0",
-    "react-native": "^0.79.2",
+    "react": "^19.0.0",
+    "react-native": "^0.79.5",
     "react-native-game-engine": "^1.2.0",
-    "react-native-safe-area-context": "^5.4.1"
+    "react-native-safe-area-context": "^5.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.27.1"
+    "@babel/core": "^7.28.0"
   },
   "private": true
 }
