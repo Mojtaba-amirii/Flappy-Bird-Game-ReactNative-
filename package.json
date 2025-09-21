@@ -9,19 +9,19 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@expo/metro-runtime": "^5.0.4",
-    "@react-native/assets-registry": "^0.79.5",
-    "expo": "^53.0.20",
-    "expo-status-bar": "^2.2.3",
-    "expo-updates": "^0.28.17",
+    "@expo/metro-runtime": "^6.1.2",
+    "@react-native/assets-registry": "^0.81.1",
+    "expo": "^54.0.9",
+    "expo-status-bar": "^3.0.8",
+    "expo-updates": "^29.0.11",
     "matter-js": "^0.20.0",
-    "react": "^19.0.0",
-    "react-native": "^0.79.5",
+    "react": "^19.1.0",
+    "react-native": "^0.81.4",
     "react-native-game-engine": "^1.2.0",
-    "react-native-safe-area-context": "^5.4.0"
+    "react-native-safe-area-context": "^5.6.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.0"
+    "@babel/core": "^7.28.4"
   },
   "private": true
 }
