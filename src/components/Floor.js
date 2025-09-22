@@ -1,26 +1,49 @@
 import Matter from "matter-js";
-import { View } from "react-native";
+
+import { View, StyleSheet } from "react-native";
 
 const Floor = (props) => {
-  const widthBody = props.body.bounds.max.x - props.body.bounds.min.x;
-  const heightBody = props.body.bounds.max.y - props.body.bounds.min.y;
-  const xBody = props.body.position.x - widthBody / 2;
-  const yBody = props.body.position.y - heightBody / 2;
-  const color = props.color;
+  const { body } = props;
+  const widthBody = body.bounds.max.x - body.bounds.min.x;
+  const heightBody = body.bounds.max.y - body.bounds.min.y;
+  const xBody = body.position.x - widthBody / 2;
+  const yBody = body.position.y - heightBody / 2;
 
   return (
     <View
-      style={{
-        backgroundColor: color,
-        position: "absolute",
-        left: xBody,
-        top: yBody,
-        width: widthBody,
-        height: heightBody,
-      }}
-    />
+      style={[
+        styles.floorContainer,
+        { left: xBody, top: yBody, width: widthBody, height: heightBody },
+      ]}
+    >
+      <View style={styles.grassLayer} />
+      <View style={styles.dirtLayer} />
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  floorContainer: {
+    position: "absolute",
+  },
+  grassLayer: {
+    height: 20,
+    backgroundColor: "#4CAF50",
+    borderTopWidth: 3,
+    borderTopColor: "#66BB6A",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  dirtLayer: {
+    flex: 1,
+    backgroundColor: "#8D6E63",
+    borderTopWidth: 2,
+    borderTopColor: "#A1887F",
+  },
+});
 
 export default (world, color, pos, size) => {
   const initialFloor = Matter.Bodies.rectangle(
@@ -30,7 +53,6 @@ export default (world, color, pos, size) => {
     size.height,
     {
       label: "Floor",
-
       isStatic: true,
     }
   );
@@ -41,6 +63,6 @@ export default (world, color, pos, size) => {
     body: initialFloor,
     color,
     pos,
-    renderer: <Floor />,
+    renderer: <Floor body={initialFloor} />,
   };
 };

@@ -1,23 +1,37 @@
 import Matter from "matter-js";
+
 import Bird from "../components/Bird";
 import Floor from "../components/Floor";
 import { Dimensions } from "react-native";
 import Obstacle from "../components/Obstacle";
-import { getPipeSizePosPair } from "../utils/random";
 
 const { height: windowHeight, width: windowWidth } = Dimensions.get("window");
 
-const initializeWorld = () => {
-  const engine = Matter.Engine.create({ enableSleeping: false });
-  const world = engine.world;
-  world.y = 0.4;
-  return { engine, world };
+const PIPE_GAP = 250; // Bigger gap for easier gameplay
+const PIPE_WIDTH = 75;
+const PIPE_SPACING = 450; // More distance between pipes
+
+const createPipePair = (x) => {
+  const screenCenter = windowHeight / 2;
+  return {
+    pipeTop: {
+      pos: { x, y: screenCenter - PIPE_GAP / 2 - 200 }, // Fixed top position
+      size: { height: 400, width: PIPE_WIDTH },
+    },
+    pipeBottom: {
+      pos: { x, y: screenCenter + PIPE_GAP / 2 + 200 }, // Fixed bottom position
+      size: { height: 400, width: PIPE_WIDTH },
+    },
+  };
 };
 
 export default () => {
-  const { engine, world } = initializeWorld();
-  const pipeSizePosA = getPipeSizePosPair();
-  const pipeSizePosB = getPipeSizePosPair(windowWidth * 0.9);
+  const engine = Matter.Engine.create({ enableSleeping: false });
+  const world = engine.world;
+
+  // Create pipe pairs with more spacing
+  const pipePair1 = createPipePair(windowWidth + 200); // First pipe further away
+  const pipePair2 = createPipePair(windowWidth + 200 + PIPE_SPACING); // Second pipe with spacing
 
   return {
     physics: { engine, world },
@@ -28,32 +42,30 @@ export default () => {
       world,
       "ObstacleTop1",
       "black",
-      pipeSizePosA.pipeTop.pos,
-      pipeSizePosA.pipeTop.size
+      pipePair1.pipeTop.pos,
+      pipePair1.pipeTop.size
     ),
-
     ObstacleBottom1: Obstacle(
       world,
       "ObstacleBottom1",
       "black",
-      pipeSizePosA.pipeBottom.pos,
-      pipeSizePosA.pipeBottom.size
+      pipePair1.pipeBottom.pos,
+      pipePair1.pipeBottom.size
     ),
 
     ObstacleTop2: Obstacle(
       world,
       "ObstacleTop2",
       "black",
-      pipeSizePosB.pipeTop.pos,
-      pipeSizePosB.pipeTop.size
+      pipePair2.pipeTop.pos,
+      pipePair2.pipeTop.size
     ),
-
     ObstacleBottom2: Obstacle(
       world,
       "ObstacleBottom2",
       "black",
-      pipeSizePosB.pipeBottom.pos,
-      pipeSizePosB.pipeBottom.size
+      pipePair2.pipeBottom.pos,
+      pipePair2.pipeBottom.size
     ),
 
     Floor: Floor(
@@ -63,4 +75,27 @@ export default () => {
       { height: 50, width: windowWidth }
     ),
   };
+};
+
+// Export obstacle components for physics system
+export const ObstacleTop = (x, y, color) => {
+  const engine = Matter.Engine.create();
+  return Obstacle(
+    engine.world,
+    "ObstacleTop",
+    color,
+    { x, y },
+    { height: 320, width: 75 }
+  );
+};
+
+export const ObstacleBottom = (x, y, color) => {
+  const engine = Matter.Engine.create();
+  return Obstacle(
+    engine.world,
+    "ObstacleBottom",
+    color,
+    { x, y },
+    { height: 320, width: 75 }
+  );
 };
